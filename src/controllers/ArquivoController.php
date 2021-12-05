@@ -86,12 +86,11 @@ class ArquivoController extends Controller {
 
     public function excluirArquivo($args) {
         $oArquivo = Arquivo::select()->where('arqcodigo', $args['codigo'])->one();
-        // Se excluiu o registro corretamente, processa a exclusão do arquivo.
-        if (Arquivo::delete()->where('arqcodigo', $args['codigo'])->execute()) {
-            // Verifica se o arquivo existe para ser excluído.
-            if (file_exists(dirname(__DIR__) . '/files/' . $oArquivo['arqnomefisico'])) {
-                unlink(dirname(__DIR__) . '/files/' . $oArquivo['arqnomefisico']);
-            }
+        // Processa a exclusão do registro de arquivo no banco de Dados.
+        Arquivo::delete()->where('arqcodigo', $args['codigo'])->execute();
+        // Verifica se o arquivo existe para ser excluído.
+        if (file_exists(dirname(__DIR__) . '/files/' . $oArquivo['arqnomefisico'])) {
+            unlink(dirname(__DIR__) . '/files/' . $oArquivo['arqnomefisico']);
         }
         $this->redirect('/');
     }
